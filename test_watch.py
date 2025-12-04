@@ -47,14 +47,17 @@ def main():
     # Give some time for watch client to receive updates
     time.sleep(2)
     
-    # Stop the watch client
+    # Stop the watch client gracefully
     print("\n4. Stopping Client 1...")
-    watch_client.send_signal(signal.SIGINT)
-    time.sleep(1)
     watch_client.terminate()
     
     # Get output from watch client
-    output = watch_client.stdout.read()
+    try:
+        output, _ = watch_client.communicate(timeout=5)
+    except subprocess.TimeoutExpired:
+        watch_client.kill()
+        output, _ = watch_client.communicate()
+    
     print("\n=== Client 1 (Watch Mode) Output ===")
     print(output)
     

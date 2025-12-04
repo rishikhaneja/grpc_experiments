@@ -9,6 +9,7 @@ import time
 import threading
 import sys
 import os
+import queue
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -45,14 +46,14 @@ class StateSyncServicer(statesync_pb2_grpc.StateSyncServicer):
             for observer in self.observers:
                 try:
                     observer.put(response)
-                except:
+                except (queue.Full, RuntimeError):
+                    # Queue is full or observer is being removed
                     pass
             
             return response
     
     def WatchState(self, request, context):
         """Stream state changes to client"""
-        import queue
         q = queue.Queue()
         self.observers.append(q)
         
