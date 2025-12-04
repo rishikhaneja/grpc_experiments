@@ -18,13 +18,20 @@ python src/server.py
 # Output: [Server] Started on port 50051
 ```
 
-### Run Client (Interactive)
+### Run GUI Client (Recommended)
+```bash
+python src/client_gui.py
+# Opens a GUI window showing current state
+# Automatically updates when other clients change state
+```
+
+### Run CLI Client (Interactive)
 ```bash
 python src/client.py
 # Then use commands: get, set <key> <value>, watch, quit
 ```
 
-### Run Client (Demo Mode)
+### Run CLI Client (Demo Mode)
 ```bash
 python src/client.py --demo
 # Runs automated demonstration

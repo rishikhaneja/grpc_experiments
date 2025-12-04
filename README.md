@@ -5,15 +5,17 @@ This repository contains two simple Python applications that use gRPC to keep st
 ## Overview
 
 - **Server**: Maintains a simple key-value state and serves it to clients via gRPC
-- **Client**: Can fetch state, update state, and watch for state changes in real-time
+- **Client (CLI)**: Command-line client that can fetch state, update state, and watch for state changes in real-time
+- **Client (GUI)**: Tkinter-based GUI client that displays state and automatically updates when other clients change it
 
 ## Features
 
 - Get current state from server
 - Update state on server
 - Real-time state change notifications (streaming)
-- Interactive client mode
+- Interactive CLI client mode
 - Automated demo mode
+- **GUI client with automatic state synchronization**
 
 ## Setup
 
@@ -21,6 +23,7 @@ This repository contains two simple Python applications that use gRPC to keep st
 
 - Python 3.7 or higher
 - pip
+- Tkinter (for GUI client)
 
 ### Installation
 
@@ -33,6 +36,15 @@ cd grpc_experiments
 2. Install dependencies:
 ```bash
 pip install -r requirements.txt
+```
+
+For the GUI client, also install Tkinter (if not already installed):
+```bash
+# On Ubuntu/Debian
+sudo apt-get install python3-tk
+
+# On macOS (usually pre-installed)
+# On Windows (usually pre-installed with Python)
 ```
 
 3. Generate gRPC code (already done, but if you modify the proto file):
@@ -53,7 +65,25 @@ The server will start on port 50051 and wait for client connections.
 
 ### Running the Client
 
-#### Interactive Mode
+#### GUI Mode (Recommended)
+
+Run the GUI client for a visual interface:
+```bash
+python src/client_gui.py
+```
+
+The GUI client features:
+- Visual display of current state in a table
+- Input fields to update state values
+- Automatic real-time updates when other clients modify state
+- Refresh button to manually fetch current state
+- Status indicator showing connection and watch status
+
+![GUI Client Empty State](https://github.com/user-attachments/assets/8ab906e5-0199-4e6d-a599-5b1cf4eb4a65)
+
+![GUI Client With State](https://github.com/user-attachments/assets/c2e8aa6e-2a6d-4c94-abd6-c2a6d26b6cb9)
+
+#### Interactive Mode (CLI)
 
 In another terminal, run the client in interactive mode:
 ```bash
@@ -97,10 +127,17 @@ This will automatically demonstrate the state synchronization features.
 
 You can run multiple clients simultaneously to see state synchronization in action:
 
+**Option 1: Multiple GUI clients**
 1. Start the server in terminal 1
-2. Start client 1 in terminal 2 and run `watch` command
-3. Start client 2 in terminal 3 and update state with `set` commands
-4. Observe client 1 receiving real-time updates
+2. Start GUI client 1 in terminal 2: `python src/client_gui.py`
+3. Start GUI client 2 in terminal 3: `python src/client_gui.py`
+4. Update state in GUI client 1 and watch it automatically appear in GUI client 2
+
+**Option 2: Mixed CLI and GUI clients**
+1. Start the server in terminal 1
+2. Start GUI client in terminal 2: `python src/client_gui.py`
+3. Start CLI client in terminal 3 and run `set counter 42`
+4. Observe the GUI automatically updating with the new state
 
 ## Architecture
 
@@ -118,7 +155,8 @@ The gRPC service is defined in `proto/statesync.proto`:
 - `src/statesync_pb2.py` - Generated protobuf messages
 - `src/statesync_pb2_grpc.py` - Generated gRPC service stubs
 - `src/server.py` - Server implementation
-- `src/client.py` - Client implementation
+- `src/client.py` - CLI client implementation
+- `src/client_gui.py` - GUI client implementation (Tkinter)
 
 ## State Model
 
