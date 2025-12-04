@@ -5,9 +5,7 @@ Test script to demonstrate watch functionality with multiple clients
 
 import subprocess
 import time
-import signal
 import sys
-import os
 
 def main():
     print("=== Testing Watch Functionality ===\n")
