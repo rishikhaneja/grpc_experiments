@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package statesync;
+
+// Service for synchronizing state between client and server
+service StateSync {
+  // Get current state from server
+  rpc GetState(Empty) returns (StateResponse);
+  
+  // Update state on server
+  rpc UpdateState(StateUpdate) returns (StateResponse);
+  
+  // Subscribe to state changes (streaming)
+  rpc WatchState(Empty) returns (stream StateResponse);
+}
+
+// Empty message for requests with no parameters
+message Empty {}
+
+// State update request
+message StateUpdate {
+  string key = 1;
+  int32 value = 2;
+}
+
+// State response
+message StateResponse {
+  map<string, int32> state = 1;
+}
